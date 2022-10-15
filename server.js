@@ -1,7 +1,7 @@
 const express = require('express')
 const app = express()
 const http = require('http').createServer(app)
-
+const { userJoin,getCurrentUser} = require('/users.js')
 const PORT = process.env.PORT || 3000
 
 http.listen(PORT, () => {
@@ -19,6 +19,10 @@ const io = require('socket.io')(http)
 
 io.on('connection', (socket) => {
     console.log('Connected...')
+    socket.on('joinRoom',({username})=>{
+        const user= userJoin(socket.id,username);
+        socket.join(user.room);
+    })
     
 
 })
